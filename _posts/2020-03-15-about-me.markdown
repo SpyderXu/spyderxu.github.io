@@ -1,0 +1,32 @@
+---
+layout: post
+title:  "About me (Click On)"
+date:   2020-03-14 00:03:36 +0530
+categories: Introduction
+---
+## 徐传智(ChuanzhiXu)
+
+I am a graduate student in Automation Department of Shanghai Jiao Tong University. I major in computer vision and interested in object detection, tracking and segmentation. I have received my bachelor degree in Huazhong University of Science and Techonology from 2013.09 to 2017.06.
+
+Here are some links about me:
+
+* [Github](https://github.com/SpyderXu) : Some source codes and paper list.
+* [Kaggle](https://www.kaggle.com/chuanzhixu) : Some object detection and segmentation challenges which I took part in.
+* [Leetcode](https://leetcode-cn.com/u/spyderxu/) : Some algorithm problems I practice to improve my poor program skills.
+
+Here are some skills about me:
+
+* Program Language : C/C++、 Python、 Matlab
+* Deep Learning Framework : Caffe、 Pytorch
+* CV Open Source Library : OpenCV、 OpenVino
+
+Here are my familiar areas about CV:
+
+* Object detection : 2D object detection or Monocular 3D object detection.
+* Tracking : Multi-object Tracking or Single-object Tracking.
+* Trajectory prediciton.
+* Traditional image processing and computer vision algorithms.
+* Traditional pattern recognition algorithms.
+* Instance segmentation and Pose estimation (just a little).
+
+
