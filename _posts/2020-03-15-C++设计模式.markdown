@@ -1,0 +1,131 @@
+---
+layout: post
+title:  "C++设计模式"
+date:   2020-03-15 00:03:36 +0530
+categories: c++
+---
+### 单例
+        #pragma once
+        #include<iostream>
+        #include<memory>
+        #include<string>
+        
+        class Singleton {
+            public:
+                //lazy模式
+                static std::shared_ptr<Singleton> instance() {
+                    if (_instance == nullptr) {
+                        _instance = std::shared_ptr<Singleton>(new Singleton());
+                    }
+                    return _instance;
+                };
+	            ~Singleton() {};
+            private:
+	            Singleton() {};
+                //禁止拷贝复制与运算符赋值
+                Singleton(Singleton&) = delete;
+                Singleton& operator=(Singleton&) = delete;
+                static std::shared_ptr<Singleton> _instance;
+        };
+
+### 工厂
+        #pragma once
+        #include<iostream>
+        #include<memory>
+
+        class baseObject {
+        public:
+            virtual void run() = 0;
+            // base 虚析构函数
+            virtual ~baseObject() {};
+        };
+
+        class Object1 : public baseObject{
+        public:
+            ~Object1() {
+            };
+            //虚函数动态绑定
+            virtual void run() {
+                std::cout << "object1" << std::endl;
+            }
+        };
+        class Object2 :public baseObject {
+        public:
+            ~Object2() {};
+            virtual void run() {
+                std::cout << "object2" << std::endl;
+            };
+        };
+
+        //工厂
+        class ObjectFactory {
+        public:
+            static std::shared_ptr<baseObject> create(std::string & key) {
+                if (key == "object1") {
+                    return std::make_shared<Object1>(new Object1());
+                }
+                if (key == "object2") {
+                    return std::make_shared<Object2>(new Object2());
+                }
+                return nullptr;
+            }
+        };
+
+### 单例工厂类+注册
+
+        #pragma once
+        #include<iostream>
+        #include<string>
+        #include<memory>
+        #include<map>
+        #include<functional>
+
+        class baseObject {
+        public:
+            virtual void run() = 0;
+            virtual ~baseObject() {};
+        };
+
+        class Object1 :public baseObject {
+        public:
+            virtual void run() {
+                std::cout << "object1" << std::endl;
+            }
+            ~Object1() {};
+        };
+
+        class Object2 :public baseObject {
+        public:
+            virtual void run() {
+                std::cout << "object2" << std::endl;
+            }
+            ~Object2() {};
+        };
+
+        class objectFactory {
+        public:
+            std::shared_ptr<objectFactory> instance() {
+                if (_instance == nullptr) {
+                    _instance = std::make_shared<objectFactory>(new objectFactory());
+                }
+            }
+            std::shared_ptr<baseObject> create(std::string& key) {
+                auto it = funcs_.find(key);
+                if (it == funcs_.end()) {
+                    return nullptr;
+                }
+                else {
+                    return std::make_shared<baseObject>((it->second)());
+                }
+            }
+            void registObjectFunc(const std::string& key, std::function<baseObject*()> func) {
+                funcs_[key] = func;
+            }
+        private:
+            objectFactory() {};
+            objectFactory(objectFactory&) = delete;
+            objectFactory& operator=(objectFactory &) = delete;
+            std::shared_ptr<objectFactory> _instance;
+            std::map<std::string, std::function<baseObject*()>> funcs_;
+        };
+
