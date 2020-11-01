@@ -4,7 +4,7 @@ title:  "C++设计模式"
 date:   2020-03-15 00:03:36 +0530
 categories: c++
 ---
-## C++设计模式
+## 生成式
 ### 单例
         #pragma once
         #include<iostream>
@@ -28,7 +28,19 @@ categories: c++
                 Singleton& operator=(Singleton&) = delete;
                 static std::shared_ptr<Singleton> _instance;
         };
+### 单例2
 
+        class Singleton {
+            public:
+                static std::shared_ptr<Singleton> get_instance() {
+                    static Singleton _instance;
+                    return std::make_shared<Singleton>(&_instance);
+                }
+            private:
+                Singleton() {};
+                Singleton& operator=(Singleton&) = delete;
+                Singleton(Singleton&) = delete;
+            };
 ### 工厂
         #pragma once
         #include<iostream>
@@ -130,3 +142,67 @@ categories: c++
             std::map<std::string, std::function<baseObject*()>> funcs_;
         };
 
+### 原型
+        //原型指定创建对象的类型，通过拷贝复制构建对象。
+
+        class protoType {
+            public:
+                protoType() {};
+                virtual ~protoType() {};
+                virtual std::shared_ptr<protoType> clone() = 0;
+            };
+
+            class concreteTypeA:public protoType {
+            public:
+                concreteTypeA(int member) :protoType() {
+                    this->member = member;
+                }
+                virtual ~concreteTypeA() {};
+                concreteTypeA(concreteTypeA &rhs) {
+                    member = rhs.member;
+                }
+                virtual std::shared_ptr<protoType> clone() {
+                    return std::make_shared<concreteTypeA>(new concreteTypeA(*this));
+                }
+            private:
+                int member;
+         };
+### 生成器
+        //通过一个包含基类的director，结合多态，指导构建的过程。
+        class Builder {
+            public:
+                Builder() {};
+                virtual ~Builder() {};
+                virtual void buildA() = 0;
+                virtual void buildB() = 0;
+        };
+
+        class XBuilder :public Builder {
+        public:
+            XBuilder() {};
+            virtual ~XBuilder() {};
+            virtual void buildA() {};
+            virtual void buildB() {};
+        };
+
+        class YBuilder :public Builder {
+        public:
+            YBuilder() {};
+            virtual ~YBuilder() {};
+            virtual void buildA() {};
+            virtual void buildB() {};
+        };
+
+        class Director {
+        public:
+            Director(Builder * p_builder) {
+                this->p_builder = std::make_shared<Builder>(p_builder);
+            };
+            virtual ~Director() {};
+            void construct() {
+                p_builder->buildA();
+                p_builder->buildB();
+            }
+        private:
+            std::shared_ptr<Builder> p_builder;
+        };
