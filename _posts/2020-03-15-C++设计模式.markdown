@@ -4,8 +4,10 @@ title:  "C++设计模式"
 date:   2020-03-15 00:03:36 +0530
 categories: c++
 ---
+一些杂记
 ## 生成式
 ### 单例
+
         #pragma once
         #include<iostream>
         #include<memory>
